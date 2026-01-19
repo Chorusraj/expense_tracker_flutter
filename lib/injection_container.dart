@@ -33,6 +33,7 @@ Future<void> init() async {
     () => AuthBloc(
       signInUseCase: sl(),
       signUpUseCase: sl(),
+      signOutUseCase: sl(),
     ),
   );
 }
