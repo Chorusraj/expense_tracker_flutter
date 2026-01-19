@@ -13,6 +13,24 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       email: email,
       password: password,
     );
-    return UserModel.fromFirebase(result.user!);
+
+     final user = result.user!;
+    return UserModel(id: user.uid, email: user.email ?? '');
+  }
+
+    @override
+  Future<UserModel> signUp(String email, String password) async {
+    final result = await firebaseAuth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+
+    final user = result.user!;
+    return UserModel(id: user.uid, email: user.email ?? '');
+  }
+
+  @override
+  Future<void> signOut() async {
+    await firebaseAuth.signOut();
   }
 }

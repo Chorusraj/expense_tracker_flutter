@@ -1,12 +1,20 @@
 import 'package:expense_tracker/features/auth/domain/usecases/sign_in.dart';
+import 'package:expense_tracker/features/auth/domain/usecases/sign_out.dart';
+import 'package:expense_tracker/features/auth/domain/usecases/sign_up.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/auth_event.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/auth_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SignInUseCase signInUseCase;
+  final SignUpUseCase signUpUseCase;
+  final SignOutUseCase signOutUseCase;
 
-  AuthBloc(this.signInUseCase) : super(AuthInitial()) {
+  AuthBloc({
+    required this.signInUseCase,
+    required this.signUpUseCase,
+    required this.signOutUseCase,
+  }) : super(AuthInitial()) {
     on<AuthSignInRequested>(_onSignInRequested);
     on<AuthSignUpRequested>(_onSignUpRequested);
   }
@@ -30,12 +38,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     emit(AuthLoading());
     try {
-      // TEMP: simulate success for now
-      await Future.delayed(const Duration(seconds: 1));
-
-      emit(AuthUnauthenticated());
+      final user = await signUpUseCase(event.email, event.password);
+      emit(AuthAuthenticated(user));
     } catch (e) {
       emit(AuthError(e.toString()));
+    }
+
+    Future<void> _onSignOutRequested(
+      AuthSignOutRequested event,
+      Emitter<AuthState> emit,
+    ) async {
+      await signOutUseCase();
+      emit(AuthUnauthenticated());
     }
   }
 }
