@@ -1,6 +1,8 @@
 import 'package:expense_tracker/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/auth_event.dart';
 import 'package:expense_tracker/features/expense/data/models/expense_model.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/expense_bloc.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/expense_event.dart';
 import 'package:expense_tracker/features/splash_screen/splash_screen.dart';
 import 'package:expense_tracker/firebase_options.dart';
 import 'package:expense_tracker/injection_container.dart' as di;
@@ -31,6 +33,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => di.sl<AuthBloc>()..add(AuthCheckRequested()),
         ),
+        BlocProvider(create: (_) => di.sl<ExpenseBloc>()..add(LoadExpenses()),),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
