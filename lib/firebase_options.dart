@@ -41,7 +41,7 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDn_667cXC-LcUGLxs2lZilA4239Ep6OEI',
+    apiKey: 'AIzaSyAVDSbUMvSauHFL_RSK8imO5bza5rxQRO8',
     appId: '1:1007130425167:web:5cdd517cc0d1ddd6b1373a',
     messagingSenderId: '1007130425167',
     projectId: 'expense-tracker-22bdc',
@@ -50,7 +50,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDgdidin_ebcSzQmMpoHlPLCJNGomDVi9Q',
+    apiKey: 'AIzaSyBMI7kGkIwZ5c7R-Xe92bzS33Vehs4lid0',
     appId: '1:1007130425167:android:1d2d805ccf67f8c7b1373a',
     messagingSenderId: '1007130425167',
     projectId: 'expense-tracker-22bdc',
@@ -58,7 +58,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAeGDYjH0xo2C3ABf9Va6Jt95ikv8tlIzU',
+    apiKey: 'AIzaSyAcpcKbZeTjiDM1oAlMLf0mdLpzZjot7aI',
     appId: '1:1007130425167:ios:0a9050aad0abaf2eb1373a',
     messagingSenderId: '1007130425167',
     projectId: 'expense-tracker-22bdc',
@@ -67,7 +67,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCIFzD1ImfzplSF0101iYyj--G7TQ4ZG7g',
+    apiKey: 'AIzaSyCdkCjwkSxev7DNTrgDaqAvL2J4kWqpnjU',
     appId: '1:1007130425167:ios:0e49e84aa66359a3b1373a',
     messagingSenderId: '1007130425167',
     projectId: 'expense-tracker-22bdc',
@@ -76,7 +76,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyDn_667cXC-LcUGLxs2lZilA4239Ep6OEI',
+    apiKey: 'AIzaSyD0vbxmLQqWNqaq-dIzP4AnsKLntDXzWr0',
     appId: '1:1007130425167:web:eb6c0a924b39fabcb1373a',
     messagingSenderId: '1007130425167',
     projectId: 'expense-tracker-22bdc',
