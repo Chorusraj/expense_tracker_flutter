@@ -1,16 +1,40 @@
-# expense_tracker
+# Expense Tracker Flutter App
 
-A new Flutter project.
+A production-ready Expense Tracker built with Flutter using Clean Architecture and BLoC.  
+Supports Firebase Authentication, offline-first expense management with Hive, and scalable architecture.
+
+## Features
+- Firebase Email/Password Authentication
+- Auto-login & Logout
+- Add / Edit / Delete Expenses
+- Offline-first storage using Hive
+- Clean Architecture (Data, Domain, Presentation)
+- BLoC State Management
+- Dependency Injection (GetIt)
+
+## Tech Stack
+- Flutter, Dart
+- BLoC
+- Firebase Authentication
+- Hive
+- Clean Architecture
+
+## Architecture
+- Data Layer
+- Domain Layer
+- Presentation Layer
 
 ## Getting Started
+1. Clone the repo
+2. Add Firebase configuration
+3. Run `flutter pub get`
+4. Run the app
 
-This project is a starting point for a Flutter application.
+## What I Learned
+- Writing scalable Flutter apps
+- Clean Architecture with BLoC
+- Offline-first data handling
+- Firebase integration
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Author
+Chorus Rajbanshi

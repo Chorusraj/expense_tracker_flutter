@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expense_tracker/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:expense_tracker/features/auth/data/datasources/auth_remote_data_source_impl.dart';
 import 'package:expense_tracker/features/auth/domain/repositories/auth_repository.dart';
@@ -9,6 +10,8 @@ import 'package:expense_tracker/features/auth/domain/usecases/sign_up.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:expense_tracker/features/expense/data/datasources/expense_local_data_source.dart';
 import 'package:expense_tracker/features/expense/data/datasources/expense_local_data_source_impl.dart';
+import 'package:expense_tracker/features/expense/data/datasources/expense_remote_data_source.dart';
+import 'package:expense_tracker/features/expense/data/datasources/expense_remote_data_source_impl.dart';
 import 'package:expense_tracker/features/expense/domain/repositories/expense_repository.dart';
 import 'package:expense_tracker/features/expense/domain/repositories/expense_repository_impl.dart';
 import 'package:expense_tracker/features/expense/presentation/bloc/expense_bloc.dart';
@@ -20,6 +23,7 @@ final sl = GetIt.instance;
 Future<void> init() async {
   // Firebase
   sl.registerLazySingleton(() => FirebaseAuth.instance);
+  sl.registerLazySingleton(() => FirebaseFirestore.instance);
 
   // Data sources
   sl.registerLazySingleton<AuthRemoteDataSource>(
@@ -28,11 +32,14 @@ Future<void> init() async {
   sl.registerLazySingleton<ExpenseLocalDataSource>(
     () => ExpenseLocalDataSourceImpl(),
   );
+  sl.registerLazySingleton<ExpenseRemoteDataSource>(
+  () => ExpenseRemoteDataSourceImpl(sl()),
+);
 
   // Repositories
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl()));
   sl.registerLazySingleton<ExpenseRepository>(
-    () => ExpenseRepositoryImpl(sl()),
+    () => ExpenseRepositoryImpl(sl(), sl()),
   );
 
   // Use cases
