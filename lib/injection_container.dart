@@ -7,6 +7,11 @@ import 'package:expense_tracker/features/auth/domain/usecases/sign_in.dart';
 import 'package:expense_tracker/features/auth/domain/usecases/sign_out.dart';
 import 'package:expense_tracker/features/auth/domain/usecases/sign_up.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:expense_tracker/features/expense/data/datasources/expense_local_data_source.dart';
+import 'package:expense_tracker/features/expense/data/datasources/expense_local_data_source_impl.dart';
+import 'package:expense_tracker/features/expense/domain/repositories/expense_repository.dart';
+import 'package:expense_tracker/features/expense/domain/repositories/expense_repository_impl.dart';
+import 'package:expense_tracker/features/expense/presentation/bloc/expense_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 
@@ -20,9 +25,15 @@ Future<void> init() async {
   sl.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSourceImpl(sl()),
   );
+  sl.registerLazySingleton<ExpenseLocalDataSource>(
+    () => ExpenseLocalDataSourceImpl(),
+  );
 
   // Repositories
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl()));
+  sl.registerLazySingleton<ExpenseRepository>(
+    () => ExpenseRepositoryImpl(sl()),
+  );
 
   // Use cases
   sl.registerLazySingleton(() => SignInUseCase(sl()));
@@ -39,4 +50,5 @@ Future<void> init() async {
       getCurrentUserUseCase: sl(),
     ),
   );
+  sl.registerFactory(() => ExpenseBloc(sl()));
 }
