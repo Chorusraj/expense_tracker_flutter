@@ -67,7 +67,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyAeGDYjH0xo2C3ABf9Va6Jt95ikv8tlIzU',
+    apiKey: 'AIzaSyCIFzD1ImfzplSF0101iYyj--G7TQ4ZG7g',
     appId: '1:1007130425167:ios:0e49e84aa66359a3b1373a',
     messagingSenderId: '1007130425167',
     projectId: 'expense-tracker-22bdc',
@@ -83,4 +83,5 @@ class DefaultFirebaseOptions {
     authDomain: 'expense-tracker-22bdc.firebaseapp.com',
     storageBucket: 'expense-tracker-22bdc.firebasestorage.app',
   );
+
 }
