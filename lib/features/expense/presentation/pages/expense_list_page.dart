@@ -18,9 +18,22 @@ class ExpenseListPage extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
 
+          if (state is ExpenseSyncing) {
+            return const LinearProgressIndicator();
+          }
+
           if (state is ExpenseLoaded) {
             if (state.expenses.isEmpty) {
-              return const Center(child: Text('No expenses yet'));
+              return const Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.receipt_long, size: 80, color: Colors.grey),
+                    const SizedBox(height: 16),
+                    const Text('No expenses yet'),
+                  ],
+                ),
+              );
             }
 
             return ListView.builder(

@@ -1,13 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expense_tracker/features/expense/data/datasources/expense_remote_data_source.dart';
 import 'package:expense_tracker/features/expense/data/models/expense_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ExpenseRemoteDataSourceImpl implements ExpenseRemoteDataSource {
   final FirebaseFirestore firestore;
+  final FirebaseAuth firebaseAuth;
 
-  ExpenseRemoteDataSourceImpl(this.firestore);
+  ExpenseRemoteDataSourceImpl(this.firestore, this.firebaseAuth);
 
-  CollectionReference get _expenseRef => firestore.collection('expenses');
+  CollectionReference get _expenseRef {
+    final uid = firebaseAuth.currentUser!.uid;
+    return firestore.collection('users').doc(uid).collection('expenses');
+  }
 
   @override
   Future<void> addExpense(ExpenseModel expense) async {

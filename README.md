@@ -12,6 +12,13 @@ Supports Firebase Authentication, offline-first expense management with Hive, an
 - BLoC State Management
 - Dependency Injection (GetIt)
 
+## Offline-First Strategy
+- Hive used as local source of truth
+- Firestore used for cloud backup and multi-device sync
+- Local data shown instantly
+- Background sync ensures consistency
+
+
 ## Tech Stack
 - Flutter, Dart
 - BLoC

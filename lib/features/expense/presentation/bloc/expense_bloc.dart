@@ -21,6 +21,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
     emit(ExpenseLoading());
     try {
       final expenses = await repository.getExpenses();
+      emit(ExpenseSyncing());
       emit(ExpenseLoaded(expenses));
     } catch (e) {
       emit(ExpenseError(e.toString()));
@@ -34,6 +35,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
     try {
       await repository.addExpense(event.expense);
       final expenses = await repository.getExpenses();
+      emit(ExpenseSyncing());
       emit(ExpenseLoaded(expenses));
     } catch (e) {
       emit(ExpenseError(e.toString()));
@@ -47,6 +49,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
     try {
       await repository.updateExpense(event.expense);
       final expenses = await repository.getExpenses();
+      emit(ExpenseSyncing());
       emit(ExpenseLoaded(expenses));
     } catch (e) {
       emit(ExpenseError(e.toString()));
@@ -60,6 +63,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
     try {
       await repository.deleteExpense(event.id);
       final expenses = await repository.getExpenses();
+      emit(ExpenseSyncing());
       emit(ExpenseLoaded(expenses));
     } catch (e) {
       emit(ExpenseError(e.toString()));

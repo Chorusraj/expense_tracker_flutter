@@ -33,7 +33,7 @@ Future<void> init() async {
     () => ExpenseLocalDataSourceImpl(),
   );
   sl.registerLazySingleton<ExpenseRemoteDataSource>(
-  () => ExpenseRemoteDataSourceImpl(sl()),
+  () => ExpenseRemoteDataSourceImpl(sl(),sl()),
 );
 
   // Repositories

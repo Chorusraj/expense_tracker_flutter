@@ -15,3 +15,5 @@ class ExpenseError extends ExpenseState {
   final String message;
   ExpenseError(this.message);
 }
+
+class ExpenseSyncing extends ExpenseState {}
