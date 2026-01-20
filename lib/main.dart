@@ -1,6 +1,11 @@
+import 'package:expense_tracker/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:expense_tracker/features/auth/presentation/bloc/auth_event.dart';
+import 'package:expense_tracker/features/splash_screen/splash_screen.dart';
 import 'package:expense_tracker/firebase_options.dart';
+import 'package:expense_tracker/injection_container.dart' as di;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,19 +20,29 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        textTheme: TextTheme(
-          headlineLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-          headlineMedium: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
-          bodyMedium: TextStyle(fontSize: 16),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => di.sl<AuthBloc>()..add(AuthCheckRequested()),
         ),
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          // This is the theme of your application.
+          textTheme: TextTheme(
+            headlineLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+            headlineMedium: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
+            ),
+            bodyMedium: TextStyle(fontSize: 16),
+          ),
+          colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+        ),
+        home: SplashScreen()
       ),
-      // home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }

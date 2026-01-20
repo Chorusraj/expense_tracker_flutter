@@ -1,3 +1,4 @@
+import 'package:expense_tracker/features/auth/domain/usecases/get_current_user.dart';
 import 'package:expense_tracker/features/auth/domain/usecases/sign_in.dart';
 import 'package:expense_tracker/features/auth/domain/usecases/sign_out.dart';
 import 'package:expense_tracker/features/auth/domain/usecases/sign_up.dart';
@@ -9,14 +10,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SignInUseCase signInUseCase;
   final SignUpUseCase signUpUseCase;
   final SignOutUseCase signOutUseCase;
+  final GetCurrentUserUseCase getCurrentUserUseCase;
 
   AuthBloc({
     required this.signInUseCase,
     required this.signUpUseCase,
     required this.signOutUseCase,
+    required this.getCurrentUserUseCase,
   }) : super(AuthInitial()) {
     on<AuthSignInRequested>(_onSignInRequested);
     on<AuthSignUpRequested>(_onSignUpRequested);
+    on<AuthSignOutRequested>(_onSignOutRequested);
+    on<AuthCheckRequested>(_onAuthCheckRequested);
   }
 
   Future<void> _onSignInRequested(
@@ -43,12 +48,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } catch (e) {
       emit(AuthError(e.toString()));
     }
+  }
 
-    Future<void> _onSignOutRequested(
-      AuthSignOutRequested event,
-      Emitter<AuthState> emit,
-    ) async {
-      await signOutUseCase();
+  Future<void> _onSignOutRequested(
+    AuthSignOutRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    await signOutUseCase();
+    emit(AuthUnauthenticated());
+  }
+
+  Future<void> _onAuthCheckRequested(
+    AuthCheckRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    final user = await getCurrentUserUseCase();
+
+    if (user != null) {
+      emit(AuthAuthenticated(user));
+    } else {
       emit(AuthUnauthenticated());
     }
   }

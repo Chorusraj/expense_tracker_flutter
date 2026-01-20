@@ -2,7 +2,9 @@ import 'package:expense_tracker/features/auth/data/datasources/auth_remote_data_
 import 'package:expense_tracker/features/auth/data/datasources/auth_remote_data_source_impl.dart';
 import 'package:expense_tracker/features/auth/domain/repositories/auth_repository.dart';
 import 'package:expense_tracker/features/auth/domain/repositories/auth_repository_impl.dart';
+import 'package:expense_tracker/features/auth/domain/usecases/get_current_user.dart';
 import 'package:expense_tracker/features/auth/domain/usecases/sign_in.dart';
+import 'package:expense_tracker/features/auth/domain/usecases/sign_out.dart';
 import 'package:expense_tracker/features/auth/domain/usecases/sign_up.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,13 +22,13 @@ Future<void> init() async {
   );
 
   // Repositories
-  sl.registerLazySingleton<AuthRepository>(
-    () => AuthRepositoryImpl(sl()),
-  );
+  sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl()));
 
   // Use cases
   sl.registerLazySingleton(() => SignInUseCase(sl()));
   sl.registerLazySingleton(() => SignUpUseCase(sl()));
+  sl.registerLazySingleton(() => SignOutUseCase(sl()));
+  sl.registerLazySingleton(() => GetCurrentUserUseCase(sl()));
 
   // Bloc
   sl.registerFactory(
@@ -34,6 +36,7 @@ Future<void> init() async {
       signInUseCase: sl(),
       signUpUseCase: sl(),
       signOutUseCase: sl(),
+      getCurrentUserUseCase: sl(),
     ),
   );
 }

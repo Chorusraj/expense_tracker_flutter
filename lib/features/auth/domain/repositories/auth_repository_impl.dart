@@ -21,4 +21,10 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<void> signOut() {
     return remoteDataSource.signOut();
   }
+
+  @override
+Future<UserEntity?> getCurrentUser() async {
+  return Future.value(remoteDataSource.getCurrentUser());
+}
+
 }

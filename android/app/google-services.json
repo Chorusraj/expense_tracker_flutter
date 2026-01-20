@@ -15,26 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDgdidin_ebcSzQmMpoHlPLCJNGomDVi9Q"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:1007130425167:android:97c4ba99d54cfaeeb1373a",
-        "android_client_info": {
-          "package_name": "com.expense_tracker.app"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDgdidin_ebcSzQmMpoHlPLCJNGomDVi9Q"
+          "current_key": "AIzaSyBMI7kGkIwZ5c7R-Xe92bzS33Vehs4lid0"
         }
       ],
       "services": {

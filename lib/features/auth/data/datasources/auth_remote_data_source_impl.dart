@@ -14,11 +14,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       password: password,
     );
 
-     final user = result.user!;
+    final user = result.user!;
     return UserModel(id: user.uid, email: user.email ?? '');
   }
 
-    @override
+  @override
   Future<UserModel> signUp(String email, String password) async {
     final result = await firebaseAuth.createUserWithEmailAndPassword(
       email: email,
@@ -32,5 +32,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<void> signOut() async {
     await firebaseAuth.signOut();
+  }
+
+@override
+  UserModel? getCurrentUser(){
+    final user = firebaseAuth.currentUser;
+    if (user == null) return null;
+
+    return UserModel(id: user.uid, email: user.email ?? '');
   }
 }
