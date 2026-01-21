@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/expense_bloc.dart';
 import '../bloc/expense_event.dart';
 import '../bloc/expense_state.dart';
-import 'add_expense_page.dart';
+import 'expense_form_page.dart';
 
 class ExpenseListPage extends StatelessWidget {
   const ExpenseListPage({super.key});
@@ -11,7 +11,7 @@ class ExpenseListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('My Expenses')),
+      appBar: AppBar(title: Text('My Expenses')),
       body: BlocBuilder<ExpenseBloc, ExpenseState>(
         builder: (context, state) {
           if (state is ExpenseLoading) {
@@ -29,8 +29,8 @@ class ExpenseListPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.receipt_long, size: 80, color: Colors.grey),
-                    const SizedBox(height: 16),
-                    const Text('No expenses yet'),
+                    SizedBox(height: 16),
+                    Text('No expenses yet'),
                   ],
                 ),
               );
@@ -50,6 +50,15 @@ class ExpenseListPage extends StatelessWidget {
                     title: Text(expense.title),
                     subtitle: Text(expense.category),
                     trailing: Text('₹ ${expense.amount.toStringAsFixed(2)}'),
+                    onTap: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ExpenseFormPage(expense: expense),
+                        ),
+                      );
+                      context.read<ExpenseBloc>().add(LoadExpenses());
+                    },
                     onLongPress: () {
                       context.read<ExpenseBloc>().add(
                         DeleteExpenseEvent(expense.id),
@@ -65,19 +74,19 @@ class ExpenseListPage extends StatelessWidget {
             return Center(child: Text(state.message));
           }
 
-          return const SizedBox.shrink();
+          return SizedBox.shrink();
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => const AddExpensePage()),
+            MaterialPageRoute(builder: (_) => ExpenseFormPage()),
           );
 
           context.read<ExpenseBloc>().add(LoadExpenses());
         },
-        child: const Icon(Icons.add),
+        child: Icon(Icons.add),
       ),
     );
   }

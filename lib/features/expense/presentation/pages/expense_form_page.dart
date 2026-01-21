@@ -1,3 +1,4 @@
+import 'package:expense_tracker/core/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
@@ -5,23 +6,37 @@ import '../../domain/entities/expense_entity.dart';
 import '../bloc/expense_bloc.dart';
 import '../bloc/expense_event.dart';
 
-class AddExpensePage extends StatefulWidget {
-  const AddExpensePage({super.key});
+class ExpenseFormPage extends StatefulWidget {
+  final ExpenseEntity? expense;
+  const ExpenseFormPage({super.key, this.expense});
+
+  bool get isEdit => expense != null;
 
   @override
-  State<AddExpensePage> createState() => _AddExpensePageState();
+  State<ExpenseFormPage> createState() => _ExpenseFormPage();
 }
 
-class _AddExpensePageState extends State<AddExpensePage> {
+class _ExpenseFormPage extends State<ExpenseFormPage> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
 
   String _category = 'Food';
 
   @override
+  void initState() {
+    super.initState();
+
+    if (widget.isEdit) {
+      _titleController.text = widget.expense!.title;
+      _amountController.text = widget.expense!.amount.toString();
+      _category = widget.expense!.category;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Expense')),
+      appBar: AppBar(title: Text(widget.isEdit? 'Edit Expenses':'Add Expense')),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -58,19 +73,23 @@ class _AddExpensePageState extends State<AddExpensePage> {
 
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(
+              child: CustomButton(
                 onPressed: () {
                   final expense = ExpenseEntity(
-                    id: const Uuid().v4(),
+                    id: widget.isEdit ? widget.expense!.id : const Uuid().v4(),
                     title: _titleController.text,
                     amount: double.parse(_amountController.text),
                     category: _category,
-                    date: DateTime.now(),
+                    date: widget.isEdit ? widget.expense!.date : DateTime.now(),
                   );
+                  
+                  final bloc = context.read<ExpenseBloc>();
 
-                  context
-                      .read<ExpenseBloc>()
-                      .add(AddExpenseEvent(expense));
+                  if(widget.isEdit){
+                    bloc.add(UpdateExpenseEvent(expense));
+                  }else{
+                    bloc.add(AddExpenseEvent(expense));
+                  }
 
                   Navigator.pop(context);
                 },
