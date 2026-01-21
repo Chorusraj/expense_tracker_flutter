@@ -1,3 +1,4 @@
+import 'package:expense_tracker/features/expense/presentation/widgets/monthly_total_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/expense_bloc.dart';
@@ -44,53 +45,60 @@ class ExpenseListPage extends StatelessWidget {
                 );
               }
 
-              return ListView.builder(
-                itemCount: state.expenses.length,
-                itemBuilder: (context, index) {
-                  final expense = state.expenses[index];
-
-                  return Card(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    child: ListTile(
-                      title: Text(expense.title),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(expense.category),
-
-                          if (expense.note != null && expense.note!.isNotEmpty)
-                            Text(
-                              expense.note!,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Colors.grey[600],
-                                fontSize: 12,
-                              ),
+              return Column(
+                children: [
+                  MonthlyTotalCard(expenses: state.expenses),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: state.expenses.length,
+                      itemBuilder: (context, index) {
+                        final expense = state.expenses[index];
+                    
+                        return Card(
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          child: ListTile(
+                            title: Text(expense.title),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(expense.category),
+                    
+                                if (expense.note != null && expense.note!.isNotEmpty)
+                                  Text(
+                                    expense.note!,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                              ],
                             ),
-                        ],
-                      ),
-                      trailing: Text('₹ ${expense.amount.toStringAsFixed(2)}'),
-                      onTap: () async {
-                        await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => ExpenseFormPage(expense: expense),
+                            trailing: Text('₹ ${expense.amount.toStringAsFixed(2)}'),
+                            onTap: () async {
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => ExpenseFormPage(expense: expense),
+                                ),
+                              );
+                              context.read<ExpenseBloc>().add(LoadExpenses());
+                            },
+                            onLongPress: () {
+                              context.read<ExpenseBloc>().add(
+                                DeleteExpenseEvent(expense.id),
+                              );
+                            },
                           ),
                         );
-                        context.read<ExpenseBloc>().add(LoadExpenses());
-                      },
-                      onLongPress: () {
-                        context.read<ExpenseBloc>().add(
-                          DeleteExpenseEvent(expense.id),
-                        );
                       },
                     ),
-                  );
-                },
+                  ),
+                ],
               );
             }
 
