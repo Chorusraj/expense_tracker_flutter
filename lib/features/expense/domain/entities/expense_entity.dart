@@ -4,6 +4,7 @@ class ExpenseEntity {
   final double amount;
   final String category;
   final DateTime date;
+  final String? note;
 
   ExpenseEntity({
     required this.id,
@@ -11,5 +12,6 @@ class ExpenseEntity {
     required this.amount,
     required this.category,
     required this.date,
+    this.note,
   });
 }

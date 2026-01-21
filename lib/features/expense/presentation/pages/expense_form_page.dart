@@ -19,6 +19,7 @@ class ExpenseFormPage extends StatefulWidget {
 class _ExpenseFormPage extends State<ExpenseFormPage> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
+  final _noteController = TextEditingController();
 
   String _category = 'Food';
 
@@ -30,13 +31,16 @@ class _ExpenseFormPage extends State<ExpenseFormPage> {
       _titleController.text = widget.expense!.title;
       _amountController.text = widget.expense!.amount.toString();
       _category = widget.expense!.category;
+      _noteController.text = widget.expense?.note ?? '';
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.isEdit? 'Edit Expenses':'Add Expense')),
+      appBar: AppBar(
+        title: Text(widget.isEdit ? 'Edit Expenses' : 'Add Expense'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -53,6 +57,14 @@ class _ExpenseFormPage extends State<ExpenseFormPage> {
               decoration: const InputDecoration(labelText: 'Amount'),
             ),
             const SizedBox(height: 16),
+
+            TextField(
+              controller: _noteController,
+              maxLines: 3,
+              decoration: const InputDecoration(labelText: 'Note (optional)'),
+            ),
+
+            SizedBox(height: 16),
 
             DropdownButtonFormField<String>(
               value: _category,
@@ -81,13 +93,16 @@ class _ExpenseFormPage extends State<ExpenseFormPage> {
                     amount: double.parse(_amountController.text),
                     category: _category,
                     date: widget.isEdit ? widget.expense!.date : DateTime.now(),
+                    note: _noteController.text.isEmpty
+                        ? null
+                        : _noteController.text,
                   );
-                  
+
                   final bloc = context.read<ExpenseBloc>();
 
-                  if(widget.isEdit){
+                  if (widget.isEdit) {
                     bloc.add(UpdateExpenseEvent(expense));
-                  }else{
+                  } else {
                     bloc.add(AddExpenseEvent(expense));
                   }
 

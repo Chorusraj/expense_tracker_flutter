@@ -48,7 +48,23 @@ class ExpenseListPage extends StatelessWidget {
                   ),
                   child: ListTile(
                     title: Text(expense.title),
-                    subtitle: Text(expense.category),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(expense.category),
+
+                        if (expense.note != null && expense.note!.isNotEmpty)
+                          Text(
+                            expense.note!,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 12,
+                            ),
+                          ),
+                      ],
+                    ),
                     trailing: Text('₹ ${expense.amount.toStringAsFixed(2)}'),
                     onTap: () async {
                       await Navigator.push(

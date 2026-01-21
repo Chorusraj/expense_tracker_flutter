@@ -18,6 +18,7 @@ class ExpenseRepositoryImpl implements ExpenseRepository {
         amount: expense.amount,
         category: expense.category,
         date: expense.date,
+        note: expense.note,
       );
     await localDataSource.addExpense(model);
     await remoteDataSource.addExpense(model);
@@ -46,6 +47,7 @@ class ExpenseRepositoryImpl implements ExpenseRepository {
         amount: expense.amount,
         category: expense.category,
         date: expense.date,
+        note: expense.note,
       );
       await localDataSource.updateExpense(model);
       await remoteDataSource.updateExpense(model);

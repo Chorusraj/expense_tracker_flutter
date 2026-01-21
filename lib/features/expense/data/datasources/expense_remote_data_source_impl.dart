@@ -22,6 +22,7 @@ class ExpenseRemoteDataSourceImpl implements ExpenseRemoteDataSource {
       'amount': expense.amount,
       'category': expense.category,
       'date': expense.date.toIso8601String(),
+      'note':expense.note,
     });
   }
 
@@ -32,6 +33,7 @@ class ExpenseRemoteDataSourceImpl implements ExpenseRemoteDataSource {
       'amount': expense.amount,
       'category': expense.category,
       'date': expense.date.toIso8601String(),
+      'note':expense.note,
     });
   }
 
@@ -52,6 +54,7 @@ class ExpenseRemoteDataSourceImpl implements ExpenseRemoteDataSource {
         amount: data['amount'],
         category: data['category'],
         date: DateTime.parse(data['date']),
+        note: data['note'],
       );
     }).toList();
   }

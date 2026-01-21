@@ -20,17 +20,22 @@ class ExpenseModel extends ExpenseEntity {
   @HiveField(4)
   final DateTime date;
 
+  @HiveField(5)
+  final String? note;
+
   ExpenseModel({
     required this.id,
     required this.title,
     required this.amount,
     required this.category,
     required this.date,
+    this.note,
   }) : super(
-          id: id,
-          title: title,
-          amount: amount,
-          category: category,
-          date: date,
-        );
+         id: id,
+         title: title,
+         amount: amount,
+         category: category,
+         date: date,
+         note: note,
+       );
 }
