@@ -55,6 +55,7 @@ Future<void> init() async {
       signUpUseCase: sl(),
       signOutUseCase: sl(),
       getCurrentUserUseCase: sl(),
+      signInWithGoogle: sl(),
     ),
   );
   sl.registerFactory(() => ExpenseBloc(sl()));

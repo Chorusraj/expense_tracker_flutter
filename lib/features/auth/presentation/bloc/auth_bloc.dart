@@ -1,4 +1,5 @@
 import 'package:expense_tracker/features/auth/domain/usecases/get_current_user.dart';
+import 'package:expense_tracker/features/auth/domain/usecases/google_sign_in.dart';
 import 'package:expense_tracker/features/auth/domain/usecases/sign_in.dart';
 import 'package:expense_tracker/features/auth/domain/usecases/sign_out.dart';
 import 'package:expense_tracker/features/auth/domain/usecases/sign_up.dart';
@@ -11,12 +12,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SignUpUseCase signUpUseCase;
   final SignOutUseCase signOutUseCase;
   final GetCurrentUserUseCase getCurrentUserUseCase;
+  final SignInWithGoogle signInWithGoogle;
 
   AuthBloc({
     required this.signInUseCase,
     required this.signUpUseCase,
     required this.signOutUseCase,
     required this.getCurrentUserUseCase,
+    required this.signInWithGoogle,
   }) : super(AuthInitial()) {
     on<AuthSignInRequested>(_onSignInRequested);
     on<AuthSignUpRequested>(_onSignUpRequested);
@@ -70,4 +73,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthUnauthenticated());
     }
   }
+
+  Future<void> _onGoogleSignInRequested(
+  AuthGoogleSignInRequested event,
+  Emitter<AuthState> emit,
+) async {
+  emit(AuthLoading());
+  try {
+    final user = await signInWithGoogle();
+    emit(AuthAuthenticated(user));
+  } catch (e) {
+    emit(AuthError(e.toString()));
+  }
+}
+
 }

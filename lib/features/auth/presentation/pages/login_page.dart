@@ -94,7 +94,9 @@ class LoginPage extends StatelessWidget {
                     width: double.infinity,
                     height: 52,
                     child: OutlinedButton.icon(
-                      onPressed: () {},
+                      onPressed: () {
+                        context.read<AuthBloc>().add(AuthGoogleSignInRequested());
+                      },
                       icon: const Icon(Icons.login),
                       label: const Text('Continue with Google'),
                     ),

@@ -23,8 +23,12 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-Future<UserEntity?> getCurrentUser() async {
-  return Future.value(remoteDataSource.getCurrentUser());
-}
+  Future<UserEntity?> getCurrentUser() async {
+    return Future.value(remoteDataSource.getCurrentUser());
+  }
 
+  @override
+  Future<UserEntity> signInWithGoogle() {
+    return remoteDataSource.googleSignIn();
+  }
 }
