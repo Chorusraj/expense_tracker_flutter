@@ -1,5 +1,6 @@
 import 'package:expense_tracker/features/expense/presentation/widgets/category_pie_chart.dart';
 import 'package:expense_tracker/features/expense/presentation/widgets/monthly_total_card.dart';
+import 'package:expense_tracker/features/expense/presentation/widgets/recent_transactions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/expense_bloc.dart';
@@ -50,6 +51,7 @@ class ExpenseListPage extends StatelessWidget {
                 children: [
                   MonthlyTotalCard(expenses: state.expenses),
                   CategoryPieChart(expenses: state.expenses),
+                  RecentTransactions(expenses: state.expenses),
                   Expanded(
                     child: ListView.builder(
                       itemCount: state.expenses.length,
