@@ -1,3 +1,4 @@
+import 'package:expense_tracker/core/widgets/custom_text_field.dart';
 import 'package:expense_tracker/core/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,6 +24,8 @@ class _ExpenseFormPage extends State<ExpenseFormPage> {
 
   String _category = 'Food';
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
@@ -43,75 +46,103 @@ class _ExpenseFormPage extends State<ExpenseFormPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            TextField(
-              controller: _titleController,
-              decoration: const InputDecoration(labelText: 'Title'),
-            ),
-            const SizedBox(height: 16),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              CustomTextformfield(
+                controller: _titleController,
+                labelText: 'Title',
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Title is required';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
 
-            TextField(
-              controller: _amountController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(labelText: 'Amount'),
-            ),
-            const SizedBox(height: 16),
-
-            TextField(
-              controller: _noteController,
-              maxLines: 3,
-              decoration: const InputDecoration(labelText: 'Note (optional)'),
-            ),
-
-            SizedBox(height: 16),
-
-            DropdownButtonFormField<String>(
-              value: _category,
-              items: const [
-                DropdownMenuItem(value: 'Food', child: Text('Food')),
-                DropdownMenuItem(value: 'Travel', child: Text('Travel')),
-                DropdownMenuItem(value: 'Rent', child: Text('Rent')),
-              ],
-              onChanged: (value) {
-                setState(() {
-                  _category = value!;
-                });
-              },
-              decoration: const InputDecoration(labelText: 'Category'),
-            ),
-
-            const SizedBox(height: 24),
-
-            SizedBox(
-              width: double.infinity,
-              child: CustomButton(
-                onPressed: () {
-                  final expense = ExpenseEntity(
-                    id: widget.isEdit ? widget.expense!.id : const Uuid().v4(),
-                    title: _titleController.text,
-                    amount: double.parse(_amountController.text),
-                    category: _category,
-                    date: widget.isEdit ? widget.expense!.date : DateTime.now(),
-                    note: _noteController.text.isEmpty
-                        ? null
-                        : _noteController.text,
-                  );
-
-                  final bloc = context.read<ExpenseBloc>();
-
-                  if (widget.isEdit) {
-                    bloc.add(UpdateExpenseEvent(expense));
-                  } else {
-                    bloc.add(AddExpenseEvent(expense));
+              CustomTextformfield(
+                controller: _amountController,
+                keyboardType: TextInputType.number,
+                labelText: 'Amount',
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Amount is required';
                   }
 
-                  Navigator.pop(context);
+                  final amount = double.tryParse(value);
+                  if (amount == null || amount <= 0) {
+                    return 'Enter a valid amount';
+                  }
+
+                  return null;
                 },
-                child: const Text('Save'),
               ),
-            ),
-          ],
+              const SizedBox(height: 16),
+
+              DropdownButtonFormField<String>(
+                value: _category,
+                items: const [
+                  DropdownMenuItem(value: 'Food', child: Text('Food')),
+                  DropdownMenuItem(value: 'Travel', child: Text('Travel')),
+                  DropdownMenuItem(value: 'Rent', child: Text('Rent')),
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    _category = value!;
+                  });
+                },
+                decoration: const InputDecoration(labelText: 'Category'),
+              ),
+
+              const SizedBox(height: 16),
+
+              CustomTextformfield(
+                controller: _noteController,
+                maxLines: 3,
+                labelText: 'Note (optional)',
+              ),
+
+              SizedBox(height: 24),
+
+              SizedBox(
+                width: double.infinity,
+                child: CustomButton(
+                  onPressed: () {
+                    if(!_formKey.currentState!.validate()){
+                      return;
+                    }
+                    final expense = ExpenseEntity(
+                      id: widget.isEdit
+                          ? widget.expense!.id
+                          : const Uuid().v4(),
+                      title: _titleController.text,
+                      amount: double.parse(_amountController.text),
+                      category: _category,
+                      date: widget.isEdit
+                          ? widget.expense!.date
+                          : DateTime.now(),
+                      note: _noteController.text.isEmpty
+                          ? null
+                          : _noteController.text,
+                    );
+
+                    final bloc = context.read<ExpenseBloc>();
+
+                    if (widget.isEdit) {
+                      bloc.add(UpdateExpenseEvent(expense));
+                    } else {
+                      bloc.add(AddExpenseEvent(expense));
+                    }
+
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Save'),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
