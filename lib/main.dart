@@ -1,3 +1,4 @@
+import 'package:expense_tracker/core/theme/app_theme.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:expense_tracker/features/auth/presentation/bloc/auth_event.dart';
 import 'package:expense_tracker/features/expense/data/models/expense_model.dart';
@@ -22,8 +23,21 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool isDarkMode = false;
+
+  void toogleTheme() {
+    setState(() {
+      isDarkMode = !isDarkMode;
+    });
+  }
 
   // This widget is the root of your application.
   @override
@@ -33,24 +47,15 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => di.sl<AuthBloc>()..add(AuthCheckRequested()),
         ),
-        BlocProvider(create: (_) => di.sl<ExpenseBloc>()..add(LoadExpenses()),),
+        BlocProvider(create: (_) => di.sl<ExpenseBloc>()..add(LoadExpenses())),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          // This is the theme of your application.
-          textTheme: TextTheme(
-            headlineLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-            headlineMedium: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-            ),
-            bodyMedium: TextStyle(fontSize: 16),
-          ),
-          colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-        ),
-        home: SplashScreen(),
+        title: 'Expense Tracker',
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
+        home: SplashScreen(onToggleTheme: toogleTheme, isDarkMode: isDarkMode)
       ),
     );
   }

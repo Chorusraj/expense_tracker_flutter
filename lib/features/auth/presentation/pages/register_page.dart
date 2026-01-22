@@ -1,13 +1,17 @@
 import 'package:expense_tracker/core/widgets/custom_text_field.dart';
 import 'package:expense_tracker/core/widgets/primary_button.dart';
+import 'package:expense_tracker/features/auth/presentation/bloc/auth_state.dart';
+import 'package:expense_tracker/features/expense/presentation/pages/expense_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 
-
 class RegisterPage extends StatelessWidget {
-  RegisterPage({super.key});
+   final VoidCallback onToggleTheme;
+   final bool isDarkMode;
+
+  RegisterPage({super.key,required this.onToggleTheme,required this.isDarkMode});
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -15,94 +19,112 @@ class RegisterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Spacer(),
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthAuthenticated) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ExpenseListPage(onToggleTheme: onToggleTheme, isDarkMode: isDarkMode)
+            ),
+          );
+        }
 
-              Text(
-                'Create Account',
-                style: Theme.of(context).textTheme.headlineLarge,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Start tracking your expenses',
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
+        if (state is AuthError) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.message)));
+        }
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Spacer(),
 
-              const SizedBox(height: 32),
+                Text(
+                  'Create Account',
+                  style: Theme.of(context).textTheme.headlineLarge,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Start tracking your expenses',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
 
-              CustomTextformfield(
-                labelText: 'Email',
-                controller: _emailController,
-                borderRadius: 12,
-              ),
-              const SizedBox(height: 16),
+                const SizedBox(height: 32),
 
-              CustomTextformfield(
-                labelText: 'Password',
-                controller: _passwordController,
-                obscureText: true,
-                borderRadius: 12,
-              ),
-              const SizedBox(height: 16),
+                CustomTextformfield(
+                  labelText: 'Email',
+                  controller: _emailController,
+                  borderRadius: 12,
+                ),
+                const SizedBox(height: 16),
 
-              CustomTextformfield(
-                labelText: 'Confirm Password',
-                controller: _confirmPasswordController,
-                obscureText: true,
-                borderRadius: 12,
-              ),
+                CustomTextformfield(
+                  labelText: 'Password',
+                  controller: _passwordController,
+                  obscureText: true,
+                  borderRadius: 12,
+                ),
+                const SizedBox(height: 16),
 
-              const SizedBox(height: 24),
+                CustomTextformfield(
+                  labelText: 'Confirm Password',
+                  controller: _confirmPasswordController,
+                  obscureText: true,
+                  borderRadius: 12,
+                ),
 
-              SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: CustomButton(
-                  onPressed: () {
-                    if (_passwordController.text !=
-                        _confirmPasswordController.text) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Passwords do not match'),
-                        ),
-                      );
-                      return;
-                    }
+                const SizedBox(height: 24),
 
-                    context.read<AuthBloc>().add(
-                          AuthSignUpRequested(
-                            _emailController.text.trim(),
-                            _passwordController.text.trim(),
+                SizedBox(
+                  width: double.infinity,
+                  height: 52,
+                  child: CustomButton(
+                    onPressed: () {
+                      if (_passwordController.text !=
+                          _confirmPasswordController.text) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Passwords do not match'),
                           ),
                         );
-                  },
-                  child: const Text('Register'),
-                ),
-              ),
+                        return;
+                      }
 
-              const SizedBox(height: 24),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('Already have an account?'),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
+                      context.read<AuthBloc>().add(
+                        AuthSignUpRequested(
+                          _emailController.text.trim(),
+                          _passwordController.text.trim(),
+                        ),
+                      );
                     },
-                    child: const Text('Login'),
+                    child: const Text('Register'),
                   ),
-                ],
-              ),
+                ),
 
-              const Spacer(),
-            ],
+                const SizedBox(height: 24),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('Already have an account?'),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Login'),
+                    ),
+                  ],
+                ),
+
+                const Spacer(),
+              ],
+            ),
           ),
         ),
       ),
