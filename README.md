@@ -21,10 +21,11 @@ A production-ready Flutter expense tracking app built using Clean Architecture a
 - Clean Architecture
 
 ## Screenshots
-<img src="screenshots/dashboard_light.png" width="250">
-<img src="screenshots/dashboard_dark.png" width="250">
-<img src="screenshots/add_expense.png" width="250">
-<img src="screenshots/settings.png" width="250">
+<img src="assets/screenshots/expense_add_page.png" width="250">
+<img src="assets/screenshots/expense_list_page.png" width="250">
+<img src="assets/screenshots/signup_page.png" width="250">
+<img src="assets/screenshots/login_page.png" width="250">
+<img src="assets/screenshots/setting_page.png" width="250">
 
 
 ## Author
