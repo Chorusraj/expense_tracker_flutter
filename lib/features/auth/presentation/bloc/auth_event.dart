@@ -20,3 +20,4 @@ class AuthSignOutRequested extends AuthEvent {}
 
 class AuthCheckRequested extends AuthEvent {}
 
+class TooglePasswordVisibility extends AuthEvent{}

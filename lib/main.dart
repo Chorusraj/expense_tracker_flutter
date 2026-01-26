@@ -48,6 +48,7 @@ class _MyAppState extends State<MyApp> {
           create: (_) => di.sl<AuthBloc>()..add(AuthCheckRequested()),
         ),
         BlocProvider(create: (_) => di.sl<ExpenseBloc>()..add(LoadExpenses())),
+        BlocProvider(create: (_) => di.sl<PasswordBloc>()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

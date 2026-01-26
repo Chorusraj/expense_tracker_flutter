@@ -4,6 +4,7 @@ import 'package:expense_tracker/features/auth/data/datasources/auth_remote_data_
 import 'package:expense_tracker/features/auth/domain/repositories/auth_repository.dart';
 import 'package:expense_tracker/features/auth/domain/repositories/auth_repository_impl.dart';
 import 'package:expense_tracker/features/auth/domain/usecases/get_current_user.dart';
+import 'package:expense_tracker/features/auth/domain/usecases/google_sign_in.dart';
 import 'package:expense_tracker/features/auth/domain/usecases/sign_in.dart';
 import 'package:expense_tracker/features/auth/domain/usecases/sign_out.dart';
 import 'package:expense_tracker/features/auth/domain/usecases/sign_up.dart';
@@ -46,6 +47,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => SignInUseCase(sl()));
   sl.registerLazySingleton(() => SignUpUseCase(sl()));
   sl.registerLazySingleton(() => SignOutUseCase(sl()));
+  sl.registerLazySingleton(()=> SignInWithGoogle(sl()));
   sl.registerLazySingleton(() => GetCurrentUserUseCase(sl()));
 
   // Bloc
@@ -59,4 +61,5 @@ Future<void> init() async {
     ),
   );
   sl.registerFactory(() => ExpenseBloc(sl()));
+  sl.registerFactory(()=> PasswordBloc());
 }

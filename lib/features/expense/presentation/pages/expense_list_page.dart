@@ -15,7 +15,11 @@ class ExpenseListPage extends StatelessWidget {
   final VoidCallback onToggleTheme;
   final bool isDarkMode;
 
-  const ExpenseListPage({super.key, required this.onToggleTheme,required this.isDarkMode});
+  const ExpenseListPage({
+    super.key,
+    required this.onToggleTheme,
+    required this.isDarkMode,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,17 +28,25 @@ class ExpenseListPage extends StatelessWidget {
         title: Text('Expenses'),
         actions: [
           IconButton(
-  icon: const Icon(Icons.settings),
-  onPressed: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => SettingsPage(userEmail: context.read<AuthBloc>().state is AuthAuthenticated?(context.read<AuthBloc>().state as AuthAuthenticated).user.email:'', isDarkMode: isDarkMode, onToggleTheme: onToggleTheme)
-      ),
-    );
-  },
-),
-
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => SettingsPage(
+                    userEmail:
+                        context.read<AuthBloc>().state is AuthAuthenticated
+                        ? (context.read<AuthBloc>().state as AuthAuthenticated)
+                              .user
+                              .email
+                        : '',
+                    isDarkMode: isDarkMode,
+                    onToggleTheme: onToggleTheme,
+                  ),
+                ),
+              );
+            },
+          ),
         ],
       ),
       body: BlocListener<ExpenseBloc, ExpenseState>(
@@ -56,9 +68,6 @@ class ExpenseListPage extends StatelessWidget {
             }
 
             if (state is ExpenseLoaded) {
-              final width = MediaQuery.sizeOf(context).width;
-              final isWide = width > 600;
-
               if (state.expenses.isEmpty) {
                 return const Center(
                   child: Column(
@@ -75,21 +84,16 @@ class ExpenseListPage extends StatelessWidget {
                 );
               }
 
-              final analyticsSection = Column(
+              return ListView(
+                padding: const EdgeInsets.only(bottom: 80),
                 children: [
                   MonthlyTotalCard(expenses: state.expenses),
                   CategoryPieChart(expenses: state.expenses),
                   RecentTransactions(expenses: state.expenses),
-                ],
-              );
+                  SizedBox(height: 8),
 
-              final expenseListSection = Expanded(
-                child: ListView.builder(
-                  itemCount: state.expenses.length,
-                  itemBuilder: (context, index) {
-                    final expense = state.expenses[index];
-
-                    return Card(
+                  ...state.expenses.map(
+                    (expense) => Card(
                       margin: const EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 8,
@@ -132,21 +136,9 @@ class ExpenseListPage extends StatelessWidget {
                           );
                         },
                       ),
-                    );
-                  },
-                ),
-              );
-
-              return Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: isWide
-                    ? Row(
-                        children: [
-                          Expanded(child: analyticsSection),
-                          expenseListSection,
-                        ],
-                      )
-                    : Column(children: [analyticsSection, expenseListSection]),
+                    ),
+                  ),
+                ],
               );
             }
 

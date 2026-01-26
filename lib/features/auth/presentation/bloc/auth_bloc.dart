@@ -25,6 +25,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthSignUpRequested>(_onSignUpRequested);
     on<AuthSignOutRequested>(_onSignOutRequested);
     on<AuthCheckRequested>(_onAuthCheckRequested);
+    on<AuthGoogleSignInRequested>(_onGoogleSignInRequested);
   }
 
   Future<void> _onSignInRequested(
@@ -75,16 +76,28 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onGoogleSignInRequested(
-  AuthGoogleSignInRequested event,
-  Emitter<AuthState> emit,
-) async {
-  emit(AuthLoading());
-  try {
-    final user = await signInWithGoogle();
-    emit(AuthAuthenticated(user));
-  } catch (e) {
-    emit(AuthError(e.toString()));
+    AuthGoogleSignInRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(AuthLoading());
+    try {
+      final user = await signInWithGoogle();
+      emit(AuthAuthenticated(user));
+    } catch (e) {
+      emit(AuthError(e.toString()));
+    }
   }
 }
 
+// Password bloc
+class PasswordBloc extends Bloc<AuthEvent, PasswordState>{
+  PasswordBloc() : super(PasswordInitialState()){
+     on<TooglePasswordVisibility>((event, emit) {
+      if (state is PasswordUpdatedState) {
+        emit(PasswordUpdatedState(!(state as PasswordUpdatedState).isVisible));
+      } else {
+        emit(PasswordUpdatedState(true));
+      }
+    });
+  }
 }

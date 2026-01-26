@@ -1,1 +1,1 @@
-const String appName="Clean Architecture Practice";
+const String appName="Expense Tracker";

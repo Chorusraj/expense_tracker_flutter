@@ -5,34 +5,34 @@ import 'package:expense_tracker/features/expense/presentation/pages/expense_list
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 class SplashScreen extends StatelessWidget {
   final VoidCallback onToggleTheme;
   final bool isDarkMode;
-  const SplashScreen({super.key,required this.onToggleTheme,required this.isDarkMode
-});
+  const SplashScreen({
+    super.key,
+    required this.onToggleTheme,
+    required this.isDarkMode,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthBloc, AuthState>(
-      listener: (context, state) {
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, state) {
         if (state is AuthAuthenticated) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => ExpenseListPage(onToggleTheme: onToggleTheme, isDarkMode: isDarkMode)),
-          );
-        } else if (state is AuthUnauthenticated) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => LoginPage(onToggleTheme: onToggleTheme, isDarkMode: isDarkMode)),
+          return ExpenseListPage(
+            onToggleTheme: onToggleTheme,
+            isDarkMode: isDarkMode,
           );
         }
+        if (state is AuthUnauthenticated) {
+          return LoginPage(
+            onToggleTheme: onToggleTheme,
+            isDarkMode: isDarkMode,
+          );
+        }
+
+        return const Scaffold(body: Center(child: CircularProgressIndicator()));
       },
-      child: const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      ),
     );
   }
 }

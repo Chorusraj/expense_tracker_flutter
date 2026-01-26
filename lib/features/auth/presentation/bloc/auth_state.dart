@@ -17,3 +17,18 @@ class AuthError extends AuthState {
   final String message;
   AuthError(this.message);
 }
+
+
+//password visibility
+abstract class PasswordState {
+  final bool isVisible;
+  const PasswordState(this.isVisible);
+}
+
+class PasswordInitialState extends PasswordState {
+  const PasswordInitialState() : super(false);
+}
+
+class PasswordUpdatedState extends PasswordState {
+  const PasswordUpdatedState(bool isVisible) : super(isVisible);
+}
